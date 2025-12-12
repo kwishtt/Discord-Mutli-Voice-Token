@@ -1,7 +1,5 @@
 # Multi-Token-Voice-24/24
 
-![Project Banner](../discord_voice_network_banner_1765545636506.png)
-
 Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cùng lúc. Được tối ưu hóa cho hiệu suất cao và độ ổn định lâu dài trên Linux/VPS.
 
 ## Tài liệu chi tiết
@@ -60,3 +58,4 @@ Project này là **Self-bot**. Việc sử dụng self-bot có thể vi phạm �
 
 ---
 *Phát triển bởi KTMJN Team*
+*Tham gia Discord: discord.gg/mgl*

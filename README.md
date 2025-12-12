@@ -1,7 +1,5 @@
 # Multi-Token-Voice-24/24
 
-![Project Banner](discord_voice_network_banner_1765545636506.png)
-
 A robust, multi-account Discord self-bot management system designed for 24/7 reliability on Linux/VPS environments.
 
 ## Overview
@@ -81,3 +79,4 @@ This software is designed for educational and management purposes. Using self-bo
 
 ---
 *Developed by KTMJN Team*
+*discord.gg/mgl*
