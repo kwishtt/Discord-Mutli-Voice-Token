@@ -127,6 +127,9 @@ Upon launching `self-bot.py`, follow the interactive prompts:
 
 This software is designed for educational and management purposes. Using self-bots (automating user accounts) may violate Discord's Terms of Service. The developers are not responsible for any account suspensions or bans resulting from the use of this tool. Use at your own risk.
 
+## Support Me 
+
+*   **⭐ Star Project**: Star this project on GitHub to show your support!
+*   **Discord**: Join the support server [discord.gg/mgl](https://discord.gg/mgl)
 ---
-*Developed by KTMJN Team*
-*discord.gg/mgl*
+*Developed by kwishtt*
