@@ -48,10 +48,55 @@ Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cù
     ```
 
 3.  **Vận hành:**
+    
+    *   **Với Linux / VPS:**
+        ```bash
+        chmod +x run.sh
+        ./run.sh
+        ```
+    
+    *   **Với Windows:**
+        Chỉ cần click đúp vào file `run.bat` là xong. Nó sẽ tự cài môi trường và chạy bot.
+
+### Cài đặt thủ công (Nếu script lỗi)
+
+Nếu anh muốn tự tay cài đặt hoặc tool tự động bị lỗi, hãy làm theo các bước sau:
+
+**Linux / MacOs:**
+```bash
+# 1. Tạo môi trường ảo
+python3 -m venv venv
+
+# 2. Kích hoạt môi trường
+source venv/bin/activate
+
+# 3. Cài thư viện
+pip install -r requirements.txt
+
+# 4. Chạy bot
+python3 self-bot.py
+```
+
+**Windows:**
+```cmd
+:: 1. Mở CMD tại thư mục, tạo venv
+python -m venv venv
+
+:: 2. Kích hoạt venv
+venv\Scripts\activate
+
+:: 3. Cài thư viện
+pip install -r requirements.txt
+
+:: 4. Chạy bot
+python self-bot.py
+```
+
     Làm theo hướng dẫn trên màn hình:
     *   Nhập ID phòng Voice.
     *   Chọn chế độ chạy (Safe/Turbo).
-    *   Để treo máy 24/24 sau khi tắt máy tính, hãy xem file [GUIDE_VN.md](GUIDE_VN.md).
+    
+    > **Lưu ý:** Để treo máy 24/24 sau khi tắt máy tính (VPS), xem hướng dẫn tại [GUIDE_VN.md](GUIDE_VN.md).
 
 ## Lưu ý quan trọng
 Project này là **Self-bot**. Việc sử dụng self-bot có thể vi phạm Điều khoản Dịch vụ của Discord. Hãy sử dụng có trách nhiệm và không lạm dụng để spam.

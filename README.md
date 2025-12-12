@@ -44,8 +44,8 @@ This automated system allows for the scalable deployment and management of multi
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repo-url>
-    cd <your-repo-name>
+    git clone https://github.com/kwishtt/Discord-Mutli-Voice-Token.git
+    cd Discord-Mutli-Voice-Token
     ```
 
 2.  **Configure Tokens:**
@@ -56,11 +56,52 @@ This automated system allows for the scalable deployment and management of multi
     ```
 
 3.  **Setup & Run:**
-    The provided script handles virtual environment creation and dependency installation.
-    ```bash
-    chmod +x run.sh
-    ./run.sh
-    ```
+
+    *   **Linux / macOS:**
+        ```bash
+        chmod +x run.sh
+        ./run.sh
+        ```
+    
+    *   **Windows:**
+        Double-click `run.bat` or run in CMD:
+        ```cmd
+        run.bat
+        ```
+
+### Manual Installation (If scripts fail)
+
+If you prefer to set up the environment manually or encounter issues with the automatic scripts:
+
+**Linux / macOS:**
+```bash
+# 1. Create Virtual Environment
+python3 -m venv venv
+
+# 2. Activate Venv
+source venv/bin/activate
+
+# 3. Install Dependencies
+pip install -r requirements.txt
+
+# 4. Run the Bot
+python3 self-bot.py
+```
+
+**Windows:**
+```cmd
+:: 1. Create Virtual Environment
+python -m venv venv
+
+:: 2. Activate Venv
+venv\Scripts\activate
+
+:: 3. Install Dependencies
+pip install -r requirements.txt
+
+:: 4. Run the Bot
+python self-bot.py
+```
 
 ## Usage
 
