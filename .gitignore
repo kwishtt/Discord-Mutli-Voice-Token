@@ -1,0 +1,31 @@
+# Sensitive Data / Credentials
+tokens.txt
+token_details.csv
+Token Check/token_details.csv
+Token Check/tokens.bak
+*.bak
+.env
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+
+# IDE specific
+.vscode/
+.idea/
+
+# OS specific
+.DS_Store
+Thumbs.db
