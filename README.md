@@ -6,7 +6,7 @@
 ![Discord](https://img.shields.io/badge/Discord-Selfbot-5865F2?style=for-the-badge&logo=discord&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-lightgrey?style=for-the-badge&logo=linux&logoColor=black)
 
-![Project Banner](https://ibb.co/3mT9ZCRN)
+![Project Banner](https://i.ibb.co/0ynRbGsM/Music-Soundcloud-Banner.png)
 
 </div>
 A robust, multi-account Discord self-bot management system designed for 24/7 reliability on Linux/VPS environments.
