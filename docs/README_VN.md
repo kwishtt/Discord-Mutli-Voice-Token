@@ -1,15 +1,5 @@
 # Multi-Token-Voice-24/24
 
-<div align="center">
-
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)
-![Discord](https://img.shields.io/badge/Discord-Selfbot-5865F2?style=for-the-badge&logo=discord&logoColor=white)
-![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-lightgrey?style=for-the-badge&logo=linux&logoColor=black)
-
-![Project Banner](../discord_voice_network_banner_1765545636506.png)
-
-</div>
-
 Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cùng lúc. Được tối ưu hóa cho hiệu suất cao và độ ổn định lâu dài trên Linux/VPS.
 
 ## 📚 Tài liệu chi tiết
