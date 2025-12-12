@@ -1,5 +1,14 @@
 # Multi-Token-Voice-24/24
 
+<div align="center">
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)
+![Discord](https://img.shields.io/badge/Discord-Selfbot-5865F2?style=for-the-badge&logo=discord&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-lightgrey?style=for-the-badge&logo=linux&logoColor=black)
+
+![Project Banner](https://ibb.co/3mT9ZCRN)
+
+</div>
 A robust, multi-account Discord self-bot management system designed for 24/7 reliability on Linux/VPS environments.
 
 ## Overview

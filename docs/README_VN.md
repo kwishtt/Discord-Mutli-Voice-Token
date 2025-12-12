@@ -1,21 +1,31 @@
 # Multi-Token-Voice-24/24
 
+<div align="center">
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)
+![Discord](https://img.shields.io/badge/Discord-Selfbot-5865F2?style=for-the-badge&logo=discord&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-lightgrey?style=for-the-badge&logo=linux&logoColor=black)
+
+![Project Banner](../discord_voice_network_banner_1765545636506.png)
+
+</div>
+
 Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cùng lúc. Được tối ưu hóa cho hiệu suất cao và độ ổn định lâu dài trên Linux/VPS.
 
-## Tài liệu chi tiết
-*   [HƯỚNG DẪN TREO BOT 24/24 TRÊN VPS (GUIDE_VN.md)](GUIDE_VN.md) - Hướng dẫn chi tiết cách dùng `screen` để treo máy không cần bật PC.
+## 📚 Tài liệu chi tiết
+*   [HƯỚNG DẪN TREO BOT 24/24 TRÊN VPS (GUIDE_VN.md)](GUIDE_VN.md) - Hướng dẫn chi tiết cách dùng `screen` để treo máy không chạy ngầm khi tắt máy tính.
 
-## Tính năng chính
+## 🌟 Tính năng chính
 
-*   **Đa luồng (Multi-Token)**: Hỗ trợ đăng nhập và quản lý hàng loạt tài khoản (token) cùng một lúc.
-*   **Kết nối bền vững (24/7)**: Tự động tham gia và duy trì kết nối voice channel không ngắt quãng. Tự động kết nối lại khi mạng lag hoặc lỗi socket.
-*   **Chế độ thông minh (Safe/Turbo)**: 
+*   **🚀 Đa luồng (Multi-Token)**: Hỗ trợ đăng nhập và quản lý hàng loạt tài khoản (token) cùng một lúc.
+*   **🔊 Kết nối bền vững (24/7)**: Tự động tham gia và duy trì kết nối voice channel không ngắt quãng. Tự động kết nối lại khi mạng lag hoặc lỗi socket.
+*   **🧠 Chế độ thông minh (Safe/Turbo)**: 
     *   **Safe Mode**: Login chậm rãi, an toàn, tránh bị Discord quét checkpoint.
     *   **Turbo Mode**: Login tốc độ cao cho dàn bot số lượng lớn.
-*   **Điều khiển tập trung**: Menu điều khiển trực tiếp (Mute, Deafen, Camera Toggle) cho toàn bộ dàn bot chỉ với một phím bấm.
-*   **Tiết kiệm tài nguyên**: Tối ưu hóa để chạy mượt mà trên các VPS cấu hình thấp (1GB RAM).
+*   **🎮 Điều khiển tập trung**: Menu điều khiển trực tiếp (Mute, Deafen, Camera Toggle) cho toàn bộ dàn bot chỉ với một phím bấm.
+*   **💾 Tiết kiệm tài nguyên**: Tối ưu hóa để chạy mượt mà trên các VPS cấu hình thấp (1GB RAM).
 
-## Cấu trúc thư mục
+## 📂 Cấu trúc thư mục
 
 ```text
 .
@@ -29,7 +39,7 @@ Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cù
 └── requirements.txt     # Các thư viện Python cần thiết
 ```
 
-## Hướng dẫn cài đặt
+## 🛠️ Hướng dẫn cài đặt
 
 ### Yêu cầu
 *   **OS**: Linux (Ubuntu, Debian, CentOS...)
@@ -49,16 +59,16 @@ Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cù
 
 3.  **Vận hành:**
     
-    *   **Với Linux / VPS:**
+    *   **🐧 Với Linux / VPS:**
         ```bash
         chmod +x run.sh
         ./run.sh
         ```
     
-    *   **Với Windows:**
+    *   **🪟 Với Windows:**
         Chỉ cần click đúp vào file `run.bat` là xong. Nó sẽ tự cài môi trường và chạy bot.
 
-### Cài đặt thủ công (Nếu script lỗi)
+### ⚙️ Cài đặt thủ công (Nếu script lỗi)
 
 Nếu anh muốn tự tay cài đặt hoặc tool tự động bị lỗi, hãy làm theo các bước sau:
 
@@ -98,9 +108,14 @@ python self-bot.py
     
     > **Lưu ý:** Để treo máy 24/24 sau khi tắt máy tính (VPS), xem hướng dẫn tại [GUIDE_VN.md](GUIDE_VN.md).
 
-## Lưu ý quan trọng
+## ⚠️ Lưu ý quan trọng
 Project này là **Self-bot**. Việc sử dụng self-bot có thể vi phạm Điều khoản Dịch vụ của Discord. Hãy sử dụng có trách nhiệm và không lạm dụng để spam.
 
 ---
+## ❤️ Ủng hộ / Donate
+Nếu thấy tool này hữu ích, hãy ủng hộ chúng mình để có động lực phát triển thêm nhé!
+
+*   **⭐ Star Project**: Tặng 1 sao cho repo này trên GitHub nhé!
+*   **Discord**: Tham gia server giao lưu [discord.gg/mgl](https://discord.gg/mgl)
+
 *Phát triển bởi KTMJN Team*
-*Tham gia Discord: discord.gg/mgl*
