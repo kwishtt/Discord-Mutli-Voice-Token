@@ -174,6 +174,16 @@ Two helper scripts live in the `Token Check/` folder to help validate and prepar
 
 Security reminder: Never commit `tokens.txt`, `dead_tokens.txt`, or other token-containing files to a public repository. The repo's `.gitignore` now includes `*.txt` to help prevent accidental commits, but double-check before pushing.
 
+### New: `Token Check/add_token.py`
+
+ - Purpose: Interactive helper to paste a token, validate it against the Discord API, and append it to `tokens.txt` (appends to the end — does not overwrite).
+ - Usage:
+     ```bash
+     pip install -r requirements.txt  # ensure aiohttp and colorama are installed
+     python "Token Check/add_token.py"
+     ```
+ - Behavior: The script validates the token; if valid it is appended to `tokens.txt` unless already present. If invalid, the script asks whether to append anyway.
+
 ## Support Me 
 
 *   **⭐ Star Project**: Star this project on GitHub to show your support!

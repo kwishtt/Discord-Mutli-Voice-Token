@@ -146,3 +146,13 @@ Lưu file và khởi động lại bot.
         ```
 
 **Lưu ý bảo mật:** Không commit các file chứa token (ví dụ `tokens.txt`, `dead_tokens.txt`). Repo đã được cập nhật `.gitignore` để chặn `*.txt`, nhưng hãy kiểm tra kỹ trước khi push.
+
+### Mới: `Token Check/add_token.py`
+
+ - Mục đích: Script tương tác — cho phép dán token, kiểm tra tính hợp lệ qua API Discord, rồi **thêm vào cuối** `tokens.txt` (không ghi đè).
+ - Chạy:
+     ```bash
+     pip install -r requirements.txt
+     python "Token Check/add_token.py"
+     ```
+ - Hành vi: Nếu token hợp lệ sẽ tự động thêm (trừ khi đã tồn tại). Nếu không hợp lệ, bạn có thể chọn có thêm vào hay không.
