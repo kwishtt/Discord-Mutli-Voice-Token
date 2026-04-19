@@ -47,7 +47,6 @@ Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cù
 ## 🛠️ Hướng dẫn cài đặt
 
 ### Yêu cầu
-*   **OS**: Linux (Ubuntu, Debian, CentOS...)
 *   **Python**: 3.8 trở lên
 
 ### Các bước thực hiện
