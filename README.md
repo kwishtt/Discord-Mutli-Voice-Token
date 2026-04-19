@@ -11,6 +11,21 @@
 </div>
 A robust, multi-account Discord self-bot management system designed for 24/7 reliability on Linux/VPS environments.
 
+## Owner ID (How to set)
+
+Some sensitive global commands are restricted to a single `OWNER_ID`. Set it before running the bot:
+
+1. Open Discord → `User Settings` → `Advanced` → enable **Developer Mode**.
+2. Right-click your profile (avatar or name in the member list) → **Copy ID**.
+3. Open `self-bot.py` and locate the `OWNER_ID` constant inside the `VoiceClone` class. Replace the placeholder with your numeric ID. Example:
+
+```py
+# inside self-bot.py
+OWNER_ID: int = 1119601947683590145  # replace this number with your own Discord user ID
+```
+
+Save the file and restart the bot.
+
 ## Overview
 
 This automated system allows for the scalable deployment and management of multiple Discord user accounts (self-bots) simultaneously. It is engineered with automatic error handling, connection persistence, and resource optimization to ensure uninterrupted voice channel presence.
@@ -127,23 +142,6 @@ Upon launching `self-bot.py`, follow the interactive prompts:
 
 This software is designed for educational and management purposes. Using self-bots (automating user accounts) may violate Discord's Terms of Service. The developers are not responsible for any account suspensions or bans resulting from the use of this tool. Use at your own risk.
 
-## Owner ID (How to set)
-
-This project restricts certain global commands to a single `OWNER_ID`.
-
-Steps to find and set your Discord User ID:
-
-1. Open Discord and go to `User Settings` → `Advanced` → enable **Developer Mode**.
-2. Right-click your profile (either in the member list or your own avatar) and choose **Copy ID**.
-3. Open `self-bot.py` and locate the `OWNER_ID` constant near the top of the file (inside the `VoiceClone` class). Replace the placeholder value with your numeric ID. Example:
-
-```py
-# inside self-bot.py
-OWNER_ID: int = 1119601947683590145  # replace this number with your own Discord user ID
-```
-
-After updating, save the file and restart the bot.
-
 ## Token Check utilities
 
 Two helper scripts live in the `Token Check/` folder to help validate and prepare token lists safely:
@@ -158,7 +156,7 @@ Two helper scripts live in the `Token Check/` folder to help validate and prepar
         ```
     - Requirements: `selenium`, a compatible `chromedriver`, and Chrome/Chromium installed.
     - Notes: This script opens a real browser window (headless mode is commented out by default). Close the browser when finished.
-
+    
 - `Token Check/cleaner.py`
     - Purpose: Read `tokens.txt`, deduplicate entries, check token validity using the Discord API, and overwrite `tokens.txt` with only valid tokens. Generates `dead_tokens.txt`, `tokens.bak` (backup), and `token_details.csv` (info about valid tokens).
     - Usage:

@@ -1,5 +1,20 @@
 # Multi-Token-Voice-24/24
 
+## 🆔 Cách gán `OWNER_ID` (Ghi chú quan trọng)
+
+Một số lệnh nhạy cảm chỉ có thể dùng bởi `OWNER_ID` (ID người dùng của bạn). Hướng dẫn lấy và gán:
+
+1. Trong Discord: `User Settings` → `Advanced` → bật **Developer Mode**.
+2. Nhấn phải vào avatar của bạn (hoặc tên trong member list) → **Copy ID**.
+3. Mở file `self-bot.py`, tìm hằng `OWNER_ID` trong lớp `VoiceClone` và thay giá trị bằng ID của bạn. Ví dụ:
+
+```py
+# inside self-bot.py
+OWNER_ID: int = 1119601947683590145  # Thay bằng ID của bạn
+```
+
+Lưu file và khởi động lại bot.
+
 Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cùng lúc. Được tối ưu hóa cho hiệu suất cao và độ ổn định lâu dài trên Linux/VPS.
 
 ## 📚 Tài liệu chi tiết
@@ -110,20 +125,6 @@ Nếu thấy tool này hữu ích, hãy ủng hộ chúng mình để có độn
 
 *Phát triển bởi KTMJN Team*
 
-## 🆔 Cách gán `OWNER_ID` (Ghi chú quan trọng)
-
-Một số lệnh nhạy cảm chỉ có thể dùng bởi `OWNER_ID` (ID người dùng của bạn). Hướng dẫn lấy và gán:
-
-1. Trong Discord: `User Settings` → `Advanced` → bật **Developer Mode**.
-2. Nhấn phải vào avatar của bạn (hoặc tên trong member list) → **Copy ID**.
-3. Mở file `self-bot.py`, tìm hằng `OWNER_ID` trong lớp `VoiceClone` và thay giá trị bằng ID của bạn. Ví dụ:
-
-```py
-# inside self-bot.py
-OWNER_ID: int = 1119601947683590145  # Thay bằng ID của bạn
-```
-
-Lưu file và khởi động lại bot.
 
 ## 🧰 `Token Check` — Mô tả ngắn 2 script
 
