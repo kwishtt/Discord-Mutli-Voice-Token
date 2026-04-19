@@ -127,6 +127,53 @@ Upon launching `self-bot.py`, follow the interactive prompts:
 
 This software is designed for educational and management purposes. Using self-bots (automating user accounts) may violate Discord's Terms of Service. The developers are not responsible for any account suspensions or bans resulting from the use of this tool. Use at your own risk.
 
+## Owner ID (How to set)
+
+This project restricts certain global commands to a single `OWNER_ID`.
+
+Steps to find and set your Discord User ID:
+
+1. Open Discord and go to `User Settings` → `Advanced` → enable **Developer Mode**.
+2. Right-click your profile (either in the member list or your own avatar) and choose **Copy ID**.
+3. Open `self-bot.py` and locate the `OWNER_ID` constant near the top of the file (inside the `VoiceClone` class). Replace the placeholder value with your numeric ID. Example:
+
+```py
+# inside self-bot.py
+OWNER_ID: int = 1119601947683590145  # replace this number with your own Discord user ID
+```
+
+After updating, save the file and restart the bot.
+
+## Token Check utilities
+
+Two helper scripts live in the `Token Check/` folder to help validate and prepare token lists safely:
+
+- `Token Check/browser_login.py`
+    - Purpose: Use a Chrome webdriver to inject a token into a browser session and attempt a login. Helpful to quickly verify a token in a browser environment.
+    - Usage (interactive):
+        ```bash
+        python "Token Check/browser_login.py"
+        # or pass token directly
+        python "Token Check/browser_login.py" "YOUR_TOKEN_HERE"
+        ```
+    - Requirements: `selenium`, a compatible `chromedriver`, and Chrome/Chromium installed.
+    - Notes: This script opens a real browser window (headless mode is commented out by default). Close the browser when finished.
+
+- `Token Check/cleaner.py`
+    - Purpose: Read `tokens.txt`, deduplicate entries, check token validity using the Discord API, and overwrite `tokens.txt` with only valid tokens. Generates `dead_tokens.txt`, `tokens.bak` (backup), and `token_details.csv` (info about valid tokens).
+    - Usage:
+        ```bash
+        pip install -r requirements.txt  # ensure aiohttp and dependencies are installed
+        python "Token Check/cleaner.py"
+        ```
+    - Output files created/updated:
+        - `tokens.txt` (overwritten with valid tokens)
+        - `dead_tokens.txt` (invalid/dead tokens)
+        - `tokens.bak` (original backup)
+        - `token_details.csv` (username/email/verified information for valid tokens)
+
+Security reminder: Never commit `tokens.txt`, `dead_tokens.txt`, or other token-containing files to a public repository. The repo's `.gitignore` now includes `*.txt` to help prevent accidental commits, but double-check before pushing.
+
 ## Support Me 
 
 *   **⭐ Star Project**: Star this project on GitHub to show your support!

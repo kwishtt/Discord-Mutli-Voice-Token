@@ -109,3 +109,40 @@ Nếu thấy tool này hữu ích, hãy ủng hộ chúng mình để có độn
 *   **Discord**: Tham gia server giao lưu [discord.gg/mgl](https://discord.gg/mgl)
 
 *Phát triển bởi KTMJN Team*
+
+## 🆔 Cách gán `OWNER_ID` (Ghi chú quan trọng)
+
+Một số lệnh nhạy cảm chỉ có thể dùng bởi `OWNER_ID` (ID người dùng của bạn). Hướng dẫn lấy và gán:
+
+1. Trong Discord: `User Settings` → `Advanced` → bật **Developer Mode**.
+2. Nhấn phải vào avatar của bạn (hoặc tên trong member list) → **Copy ID**.
+3. Mở file `self-bot.py`, tìm hằng `OWNER_ID` trong lớp `VoiceClone` và thay giá trị bằng ID của bạn. Ví dụ:
+
+```py
+# inside self-bot.py
+OWNER_ID: int = 1119601947683590145  # Thay bằng ID của bạn
+```
+
+Lưu file và khởi động lại bot.
+
+## 🧰 `Token Check` — Mô tả ngắn 2 script
+
+- `Token Check/browser_login.py`
+    - Mục đích: Dùng `selenium` + `chromedriver` để inject token vào session trình duyệt và thử đăng nhập Discord. Tiện để kiểm tra token trong môi trường trình duyệt.
+    - Chạy:
+        ```bash
+        python "Token Check/browser_login.py"
+        # hoặc truyền token trực tiếp
+        python "Token Check/browser_login.py" "YOUR_TOKEN_HERE"
+        ```
+    - Yêu cầu: `selenium`, Chrome/Chromium, `chromedriver`.
+
+- `Token Check/cleaner.py`
+    - Mục đích: Đọc `tokens.txt`, loại trùng, kiểm tra token hợp lệ bằng API Discord, lưu danh sách token hợp lệ vào `tokens.txt` (ghi đè), và xuất `dead_tokens.txt`, `tokens.bak`, `token_details.csv`.
+    - Chạy:
+        ```bash
+        pip install -r requirements.txt
+        python "Token Check/cleaner.py"
+        ```
+
+**Lưu ý bảo mật:** Không commit các file chứa token (ví dụ `tokens.txt`, `dead_tokens.txt`). Repo đã được cập nhật `.gitignore` để chặn `*.txt`, nhưng hãy kiểm tra kỹ trước khi push.
