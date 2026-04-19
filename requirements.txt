@@ -1,3 +1,0 @@
-discord.py-self
-colorama
-PyNaCl
