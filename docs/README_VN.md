@@ -2,7 +2,7 @@
 
 ## 🆔 Cách gán `OWNER_ID` (Ghi chú quan trọng)
 
-Một số lệnh nhạy cảm chỉ có thể dùng bởi `OWNER_ID` (ID người dùng của bạn). Hướng dẫn lấy và gán:
+Một số lệnh nhạy cảm (spam chat) chỉ có thể dùng bởi `OWNER_ID` (ID người dùng của bạn). Hướng dẫn lấy và gán:
 
 1. Trong Discord: `User Settings` → `Advanced` → bật **Developer Mode**.
 2. Nhấn phải vào avatar của bạn (hoặc tên trong member list) → **Copy ID**.
@@ -12,10 +12,7 @@ Một số lệnh nhạy cảm chỉ có thể dùng bởi `OWNER_ID` (ID ngư�
 # inside self-bot.py
 OWNER_ID: int = 1119601947683590145  # Thay bằng ID của bạn
 ```
-
 Lưu file và khởi động lại bot.
-
-Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cùng lúc. Được tối ưu hóa cho hiệu suất cao và độ ổn định lâu dài trên Linux/VPS.
 
 ## 📚 Tài liệu chi tiết
 *   [HƯỚNG DẪN TREO BOT 24/24 TRÊN VPS (GUIDE_VN.md)](GUIDE_VN.md) - Hướng dẫn chi tiết cách dùng `screen` để treo máy không chạy ngầm khi tắt máy tính.
@@ -45,16 +42,15 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-4. Nâng cấp pip và cài phụ thuộc:
+4. Cài thư viện cần thiết.
 
 ```powershell
-python -m pip install --upgrade pip
+
 pip install -r requirements.txt
 ```
 
-5. (Tùy chọn nếu sử dụng - đây là login token bằng trình duyệt để kiểm tra token - thay đổi thông tin token) Nếu sử dụng `Token Check/browser_login.py` cần cài Chrome và `chromedriver` tương thích:
-
-- Tải Chrome/Chromium và `chromedriver` cùng phiên bản; đặt `chromedriver.exe` vào thư mục nằm trong `PATH` hoặc copy vào thư mục dự án.
+5. Setup file token:
+- Tạo 1 file `tokens.txt` tại cùng với thư mục hiện tại mà `self-bot.py` đang tồn tại. Dán token tài khoản thực thế của bạn vào, mỗi token đặt 1 dòng.
 
 6. Chạy bot (hoặc dùng `run.bat`):
 
@@ -68,9 +64,9 @@ python self-bot.py
 
 Ghi chú:
 - Muốn chạy như service, cân nhắc `nssm` (Non-Sucking Service Manager) để đăng ký script như Windows service.
-- Luôn giữ `tokens.txt` ở máy local và tuyệt đối không commit file này lên repo công khai.
+- Luôn giữ `tokens.txt` ở máy local và tuyệt đối không chia sẻ!!
 
-## 🛠️ Hướng dẫn cài đặt
+## Linux Os - Hướng dẫn cài đặt
 
 ### Yêu cầu
 *   **Python**: 3.8 trở lên
@@ -80,14 +76,7 @@ Ghi chú:
 1.  **Cấu hình Token:**
     Tạo một file tên là `tokens.txt` ở thư mục gốc (cùng chỗ với `run.sh`), dán danh sách token vào, mỗi token một dòng.
 
-2.  **Chạy lệnh cài đặt:**
-    Cấp quyền và chạy script tự động:
-    ```bash
-    chmod +x run.sh
-    ./run.sh
-    ```
-
-3.  **Vận hành:**
+2.  **Vận hành:**
     
     *   **🐧 Với Linux / VPS:**
         ```bash
@@ -139,6 +128,7 @@ python self-bot.py
     > **Lưu ý:** Để treo máy 24/24 sau khi tắt máy tính (VPS), xem hướng dẫn tại [GUIDE_VN.md](GUIDE_VN.md).
 
 ## ⚠️ Lưu ý quan trọng
+
 Project này là **Self-bot**. Việc sử dụng self-bot có thể vi phạm Điều khoản Dịch vụ của Discord. Hãy sử dụng có trách nhiệm và không lạm dụng để spam.
 
 ---
@@ -148,10 +138,10 @@ Nếu thấy tool này hữu ích, hãy ủng hộ chúng mình để có độn
 *   **⭐ Star Project**: Tặng 1 sao cho repo này trên GitHub nhé!
 *   **Discord**: Tham gia server giao lưu [discord.gg/mgl](https://discord.gg/mgl)
 
-*Phát triển bởi KTMJN Team*
+*Phát triển bởi kwishtt*
 
 
-## 🧰 `Token Check` — Mô tả ngắn 2 script
+## 🧰 CÁC SCRIPT HỖ TRỢ
 
 - `Token Check/browser_login.py`
     - Mục đích: Dùng `selenium` + `chromedriver` để inject token vào session trình duyệt và thử đăng nhập Discord. Tiện để kiểm tra token trong môi trường trình duyệt.
@@ -171,14 +161,4 @@ Nếu thấy tool này hữu ích, hãy ủng hộ chúng mình để có độn
         python "Token Check/cleaner.py"
         ```
 
-**Lưu ý bảo mật:** Không commit các file chứa token (ví dụ `tokens.txt`, `dead_tokens.txt`). Repo đã được cập nhật `.gitignore` để chặn `*.txt`, nhưng hãy kiểm tra kỹ trước khi push.
-
-### Mới: `Token Check/add_token.py`
-
- - Mục đích: Script tương tác — cho phép dán token, kiểm tra tính hợp lệ qua API Discord, rồi **thêm vào cuối** `tokens.txt` (không ghi đè).
- - Chạy:
-     ```bash
-     pip install -r requirements.txt
-     python "Token Check/add_token.py"
-     ```
- - Hành vi: Nếu token hợp lệ sẽ tự động thêm (trừ khi đã tồn tại). Nếu không hợp lệ, bạn có thể chọn có thêm vào hay không.
+**Lưu ý bảo mật:** TUYỆT ĐỐI KHÔNG chia sẻ những file có chứa từ token đi bất cứ đâu, hãy lưu giữ nó ở máy của bạn. 
