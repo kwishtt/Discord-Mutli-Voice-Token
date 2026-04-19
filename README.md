@@ -43,19 +43,46 @@ This automated system allows for the scalable deployment and management of multi
 *   **Centralized Control**: Interactive command-line interface for batch locking mute, deafen, and video states across all instances.
 *   **Resource Efficiency**: Optimized for low-memory environments (VPS).
 
-## Project Structure
+## Windows — Detailed Setup
 
-```text
-.
-├── docs/                # Documentation
-│   ├── GUIDE_VN.md      # Detailed 24/7 VPS setup guide (Vietnamese)
-│   └── README_VN.md     # Project overview (Vietnamese)
-├── Token Check/         # Utilities for token validation and cleanup
-├── self-bot.py          # Main application logic
-├── run.sh               # Deployment & environment setup script
-├── tokens.txt           # Token list (Git-ignored)
-└── requirements.txt     # Python dependencies
+If you're running this project on Windows, follow these steps for a reliable environment.
+
+1. Install Python 3.8+ from https://www.python.org/ and select "Add Python to PATH" during installer.
+
+2. Open a Command Prompt or PowerShell in the project directory (run as Administrator if you need system-wide installs).
+
+3. Create and activate a virtual environment:
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
 ```
+
+4. Upgrade pip and install dependencies:
+
+```powershell
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+5. (Optional) If you plan to use `Token Check/browser_login.py` you need Chrome and a matching `chromedriver`:
+
+- Download Chrome/Chromium from Google or Microsoft.
+- Download the `chromedriver` version matching your Chrome version and either place it in a folder on your `PATH` or copy the `chromedriver.exe` into the project root.
+
+6. Run the bot (or use `run.bat`):
+
+```powershell
+python self-bot.py
+# or
+.\\run.bat
+```
+
+7. Run at startup (optional): use Windows Task Scheduler to create a task that runs on logon and executes `python <full_path>\self-bot.py` with the working directory set to the project folder.
+
+Notes:
+- If you need to run multiple instances or services, consider using `nssm` (Non-Sucking Service Manager) to register the script as a Windows service.
+- Always keep `tokens.txt` local and never commit it to source control.
 
 ## Getting Started
 

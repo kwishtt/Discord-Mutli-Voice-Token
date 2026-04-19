@@ -30,19 +30,45 @@ Hệ thống quản lý và treo Voice Discord 24/7 cho nhiều tài khoản cù
 *   **🎮 Điều khiển tập trung**: Menu điều khiển trực tiếp (Mute, Deafen, Camera Toggle) cho toàn bộ dàn bot chỉ với một phím bấm.
 *   **💾 Tiết kiệm tài nguyên**: Tối ưu hóa để chạy mượt mà trên các VPS cấu hình thấp (1GB RAM).
 
-## 📂 Cấu trúc thư mục
+## Windows — Hướng dẫn cài đặt chi tiết
 
-```text
-.
-├── docs/                # Tài liệu hướng dẫn
-│   ├── GUIDE_VN.md      # Hướng dẫn treo máy chi tiết
-│   └── README_VN.md     # File đọc này
-├── Token Check/         # Công cụ kiểm tra và lọc token
-├── self-bot.py          # Code chính chạy bot
-├── run.sh               # Script tự động cài đặt và chạy
-├── tokens.txt           # Danh sách token (Không được share file này)
-└── requirements.txt     # Các thư viện Python cần thiết
+Nếu bạn chạy dự án trên Windows, làm theo các bước sau để cấu hình môi trường ổn định:
+
+1. Tải và cài đặt Python 3.8+ từ https://www.python.org/ — trong quá trình cài đặt chọn "Add Python to PATH".
+
+2. Mở Command Prompt hoặc PowerShell trong thư mục dự án (chạy dưới quyền Administrator nếu cần).
+
+3. Tạo và kích hoạt virtual environment:
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
 ```
+
+4. Nâng cấp pip và cài phụ thuộc:
+
+```powershell
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+5. (Tùy chọn) Nếu sử dụng `Token Check/browser_login.py` cần cài Chrome và `chromedriver` tương thích:
+
+- Tải Chrome/Chromium và `chromedriver` cùng phiên bản; đặt `chromedriver.exe` vào thư mục nằm trong `PATH` hoặc copy vào thư mục dự án.
+
+6. Chạy bot (hoặc dùng `run.bat`):
+
+```powershell
+python self-bot.py
+# hoặc
+.\\run.bat
+```
+
+7. Chạy tự động khi khởi động (tuỳ chọn): dùng Task Scheduler để tạo task chạy `python <đường_dẫn_đầy_đủ>\self-bot.py` khi đăng nhập, đặt working directory là thư mục dự án.
+
+Ghi chú:
+- Muốn chạy như service, cân nhắc `nssm` (Non-Sucking Service Manager) để đăng ký script như Windows service.
+- Luôn giữ `tokens.txt` ở máy local và tuyệt đối không commit file này lên repo công khai.
 
 ## 🛠️ Hướng dẫn cài đặt
 
