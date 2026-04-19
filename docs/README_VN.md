@@ -52,7 +52,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-5. (Tùy chọn) Nếu sử dụng `Token Check/browser_login.py` cần cài Chrome và `chromedriver` tương thích:
+5. (Tùy chọn nếu sử dụng - đây là login token bằng trình duyệt để kiểm tra token - thay đổi thông tin token) Nếu sử dụng `Token Check/browser_login.py` cần cài Chrome và `chromedriver` tương thích:
 
 - Tải Chrome/Chromium và `chromedriver` cùng phiên bản; đặt `chromedriver.exe` vào thư mục nằm trong `PATH` hoặc copy vào thư mục dự án.
 

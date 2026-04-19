@@ -11,6 +11,7 @@
 </div>
 A robust, multi-account Discord self-bot management system designed for 24/7 reliability on Linux/VPS environments.
 
+*(Vui lòng xem tài liệu Tiếng Việt tại [docs/README_VN.md](docs/README_VN.md))*
 ## Owner ID (How to set)
 
 Some sensitive global commands are restricted to a single `OWNER_ID`. Set it before running the bot:
@@ -29,9 +30,6 @@ Save the file and restart the bot.
 ## Overview
 
 This automated system allows for the scalable deployment and management of multiple Discord user accounts (self-bots) simultaneously. It is engineered with automatic error handling, connection persistence, and resource optimization to ensure uninterrupted voice channel presence.
-
-**For Vietnamese documentation, please see [docs/README_VN.md](docs/README_VN.md).**  
-*(Vui lòng xem tài liệu Tiếng Việt tại [docs/README_VN.md](docs/README_VN.md))*
 
 ## Core Features
 
