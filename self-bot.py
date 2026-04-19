@@ -51,10 +51,11 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
     datefmt='%H:%M:%S'
 )
-# Suppress noisy library logs
+# Tắt log nhiễu từ thư viện bên ngoài, chỉ hiện lỗi nghiêm trọng
 logging.getLogger('discord').setLevel(logging.ERROR)
 logging.getLogger('discord.client').setLevel(logging.ERROR)
-logging.getLogger('discord.gateway').setLevel(logging.CRITICAL) # Hide reconnect stack traces
+logging.getLogger('discord.gateway').setLevel(logging.WARNING)
+logging.getLogger('discord.http').setLevel(logging.ERROR)
 logging.getLogger('websockets').setLevel(logging.ERROR)
 logging.getLogger('aiohttp').setLevel(logging.ERROR)
 
@@ -86,16 +87,26 @@ class VoiceClone(discord.Client):
         self.target_channel_id: int = channel_id
         self.vc: Optional[discord.VoiceClient] = None
         self.is_connected: bool = False
+        # Auto-Room tracking: channel mới khi bị server bot move
+        self.moved_to_channel: Optional[int] = None
+        self.is_leader: bool = False  # Đánh dấu token leader
 
     async def on_ready(self) -> None:
         """Sự kiện khi bot login thành công."""
         logger.info(Fore.GREEN + f"[+] Logged in: {self.user} ({self.token_str[:6]}...)")
         await self.join_vc()
 
+    # ID duy nhất được phép dùng lệnh chat đồng loạt
+    OWNER_ID: int = 1119601947683590145 #TODO 
+
     async def on_message(self, message):
         """Lắng nghe lệnh chat đặc biệt."""
         # Bỏ qua tin nhắn của chính mình
         if message.author.id == self.user.id:
+            return
+
+        # Chỉ cho phép owner sử dụng lệnh chat đồng loạt
+        if message.author.id != self.OWNER_ID:
             return
 
         # Check pattern: <!Nội dung>
@@ -114,6 +125,25 @@ class VoiceClone(discord.Client):
                     # logger.info(f"[+] {self.user} echoed: {msg_to_say}") # Optional log
                 except Exception as e:
                     pass # Im lặng nếu lỗi (thường là do không có quyền chat)
+
+    async def on_voice_state_update(self, member, before, after) -> None:
+        """Theo dõi khi bot bị server bot move sang channel khác (Auto-Room)."""
+        # Chỉ quan tâm nếu là leader và bị move
+        if not self.is_leader:
+            return
+        if not self.user or member.id != self.user.id:
+            return
+
+        # Detect: trước đó ở lobby, giờ bị move sang channel khác
+        if (before.channel and after.channel
+                and before.channel.id != after.channel.id
+                and before.channel.id == self.target_channel_id):
+            new_ch = after.channel
+            self.moved_to_channel = new_ch.id
+            logger.info(
+                Fore.GREEN + f"[*] LEADER {self.user} được move sang room: "
+                f"{new_ch.name} ({new_ch.id})"
+            )
 
     async def join_vc(self) -> None:
         """Tham gia vào Voice Channel bằng change_voice_state (Bypass Voice WS handshake)."""
@@ -316,6 +346,92 @@ class BotManager:
         
         print(Fore.GREEN + f"[v] Success: {count}/{len(ready_bots)}")
 
+    async def auto_room_mode(self, lobby_id: int, leader_count: int = 5, delay: float = 5.0) -> None:
+        """Chế độ Auto-Room: leader join lobby, đợi move, rồi phân phối còn lại."""
+        total = len(self.tokens)
+        if total < leader_count:
+            print(Fore.RED + f"[!] Cần ít nhất {leader_count} token! Hiện có: {total}")
+            return
+
+        # --- Bước 1: Gửi leader vào lobby ---
+        print(Fore.YELLOW + f"\n[*] BƯỚC 1: Gửi {leader_count} leader vào lobby {lobby_id}...")
+        leaders: List[VoiceClone] = []
+        for i in range(leader_count):
+            token = self.tokens[i]
+            if len(token) < 5:
+                continue
+            bot = VoiceClone(token, lobby_id)
+            bot.is_leader = True  # Đánh dấu leader để track move
+            leaders.append(bot)
+            self.bots.append(bot)
+            logger.info(Fore.BLUE + f"[*] Leader {i+1}/{leader_count} → Lobby {lobby_id}")
+            asyncio.create_task(self.safe_start_bot(bot, token))
+            if i < leader_count - 1 and delay > 0:
+                print(Fore.BLACK + Style.BRIGHT + f"[*] Waiting {delay}s... ({i+1}/{leader_count})")
+                await asyncio.sleep(delay)
+
+        # --- Bước 2: Đợi leader được server bot move sang room mới ---
+        print(Fore.YELLOW + f"\n[*] BƯỚC 2: Đang đợi server bot tạo room và move leader...")
+        print(Fore.BLACK + Style.BRIGHT + "    (Timeout: 3 phút)")
+
+        timeout_seconds: int = 180  # 3 phút
+        new_channel_id: Optional[int] = None
+
+        for tick in range(timeout_seconds * 2):  # Check mỗi 0.5s
+            await asyncio.sleep(0.5)
+            for leader in leaders:
+                if leader.moved_to_channel:
+                    new_channel_id = leader.moved_to_channel
+                    break
+            if new_channel_id:
+                break
+            # Progress mỗi 10s
+            if tick > 0 and tick % 20 == 0:
+                elapsed = tick // 2
+                print(Fore.BLACK + Style.BRIGHT + f"    ... đã đợi {elapsed}s")
+
+        if not new_channel_id:
+            print(Fore.RED + "[!] TIMEOUT! Không phát hiện room mới sau 3 phút.")
+            print(Fore.RED + "    Đảm bảo server bot có auto-room khi join lobby.")
+            return
+
+        print(Fore.GREEN + f"[+] Phát hiện room mới: {new_channel_id}")
+
+        # Đợi thêm 5s để đảm bảo tất cả leader đã được move
+        print(Fore.BLACK + Style.BRIGHT + "    Đợi thêm 5s để ổn định...")
+        await asyncio.sleep(5)
+
+        # Thu thập tất cả room mới (phòng trường hợp leader bị chia nhiều room)
+        new_rooms: List[int] = list(set(
+            leader.moved_to_channel for leader in leaders
+            if leader.moved_to_channel
+        ))
+        print(Fore.GREEN + f"[+] Tổng room mới phát hiện: {len(new_rooms)} → {new_rooms}")
+
+        # --- Bước 3: Phân phối token còn lại vào các room mới ---
+        remaining_tokens = self.tokens[leader_count:]
+        if not remaining_tokens:
+            print(Fore.YELLOW + "[!] Không còn token nào để phân phối.")
+            return
+
+        num_rooms = len(new_rooms)
+        print(Fore.YELLOW + f"\n[*] BƯỚC 3: Phân phối {len(remaining_tokens)} token còn lại vào {num_rooms} room...")
+
+        for i, token in enumerate(remaining_tokens):
+            if len(token) < 5:
+                continue
+            # Round-robin phân phối vào các room
+            assigned_room = new_rooms[i % num_rooms]
+            bot = VoiceClone(token, assigned_room)
+            self.bots.append(bot)
+            logger.info(Fore.BLUE + f"[*] Bot {leader_count + i + 1} → Room {assigned_room}")
+            asyncio.create_task(self.safe_start_bot(bot, token))
+            if i < len(remaining_tokens) - 1 and delay > 0:
+                print(Fore.BLACK + Style.BRIGHT + f"[*] Waiting {delay}s... ({leader_count + i + 1}/{total})")
+                await asyncio.sleep(delay)
+
+        print(Fore.GREEN + f"\n[+] HOÀN TẤT! Đã phân phối tất cả {total} token.")
+
     async def shutdown(self) -> None:
         """Đóng tất cả bot."""
         print(Fore.RED + "\n[!] Shutting down all bots...")
@@ -380,39 +496,73 @@ async def main():
         print(Fore.RED + "No tokens found!")
         return
 
-    print(Fore.CYAN + "Enter Voice Channel IDs (space separated):")
-    print(Fore.BLACK + Style.BRIGHT + "VD: 123456789 987654321 555666777")
-    try:
-        cid_str = await asyncio.get_event_loop().run_in_executor(None, input, "> ")
-        channel_ids = [int(cid.strip()) for cid in cid_str.strip().split() if cid.strip()]
-        
-        if not channel_ids:
-            print(Fore.RED + "Không có channel ID nào được nhập!")
-            return
-        
-        manager.channel_ids = channel_ids
-        print(Fore.GREEN + f"[+] Đã nhập {len(channel_ids)} channel(s): {channel_ids}")
-        
-        # Hiển thị phân bổ bot
-        print(Fore.YELLOW + f"[*] {len(manager.tokens)} bot sẽ được chia đều vào {len(channel_ids)} channel")
-        for i, cid in enumerate(channel_ids):
-            bot_count = len([j for j in range(len(manager.tokens)) if j % len(channel_ids) == i])
-            print(Fore.BLACK + Style.BRIGHT + f"    Channel {cid}: ~{bot_count} bot")
-            
-    except ValueError:
-        print(Fore.RED + "Invalid ID format. Chỉ nhập số, cách nhau bởi dấu cách.")
-        return
+    # --- Chọn chế độ ---
+    print(Fore.CYAN + "\nChọn chế độ hoạt động:")
+    print(Fore.WHITE + "  1. Normal Mode  - Nhập channel, chia đều bot vào")
+    print(Fore.WHITE + "  2. Auto-Room    - 5 leader join lobby → server bot tạo room → phân phối còn lại")
+    mode = await asyncio.get_event_loop().run_in_executor(None, input, Fore.YELLOW + "Mode (1/2): ")
+    mode = mode.strip()
 
-    # Option: Turbo Login
+    # --- Option: Turbo Login ---
     print(Fore.CYAN + "Enable Turbo Login (3s delay) or Safe Mode (8s)? (y/N):")
     turbo_choice = await asyncio.get_event_loop().run_in_executor(None, input, "> ")
     delay_time = 3 if turbo_choice.strip().lower() == 'y' else 8
 
-    # Start bots in background
-    print(Fore.YELLOW + f"[*] Starting bots (Delay: {delay_time}s)...")
-    start_task = asyncio.create_task(manager.start_all(delay=delay_time))
+    if mode == '2':
+        # ===== AUTO-ROOM MODE =====
+        print(Fore.CYAN + "\n--- AUTO-ROOM MODE ---")
+        print(Fore.CYAN + "Nhập Lobby Channel ID (kênh để 5 leader join vào):")
+        try:
+            lobby_str = await asyncio.get_event_loop().run_in_executor(None, input, "> ")
+            lobby_id = int(lobby_str.strip())
+        except ValueError:
+            print(Fore.RED + "ID không hợp lệ!")
+            return
 
-    # Start control loop
+        print(Fore.CYAN + "Số lượng leader (mặc định 5):")
+        leader_str = await asyncio.get_event_loop().run_in_executor(None, input, "> ")
+        leader_count = 5
+        if leader_str.strip().isdigit():
+            leader_count = int(leader_str.strip())
+            if leader_count < 1:
+                leader_count = 5
+
+        print(Fore.GREEN + f"\n[+] Lobby: {lobby_id} | Leader: {leader_count} | Delay: {delay_time}s")
+        print(Fore.GREEN + f"[+] Token còn lại ({len(manager.tokens) - leader_count}) sẽ được phân phối sau.")
+
+        # Start auto-room trong background
+        asyncio.create_task(manager.auto_room_mode(lobby_id, leader_count, delay_time))
+
+    else:
+        # ===== NORMAL MODE =====
+        print(Fore.CYAN + "\nEnter Voice Channel IDs (space separated):")
+        print(Fore.BLACK + Style.BRIGHT + "VD: 123456789 987654321 555666777")
+        try:
+            cid_str = await asyncio.get_event_loop().run_in_executor(None, input, "> ")
+            channel_ids = [int(cid.strip()) for cid in cid_str.strip().split() if cid.strip()]
+            
+            if not channel_ids:
+                print(Fore.RED + "Không có channel ID nào được nhập!")
+                return
+            
+            manager.channel_ids = channel_ids
+            print(Fore.GREEN + f"[+] Đã nhập {len(channel_ids)} channel(s): {channel_ids}")
+            
+            # Hiển thị phân bổ bot
+            print(Fore.YELLOW + f"[*] {len(manager.tokens)} bot sẽ được chia đều vào {len(channel_ids)} channel")
+            for i, cid in enumerate(channel_ids):
+                bot_count = len([j for j in range(len(manager.tokens)) if j % len(channel_ids) == i])
+                print(Fore.BLACK + Style.BRIGHT + f"    Channel {cid}: ~{bot_count} bot")
+                
+        except ValueError:
+            print(Fore.RED + "Invalid ID format. Chỉ nhập số, cách nhau bởi dấu cách.")
+            return
+
+        # Start bots in background
+        print(Fore.YELLOW + f"[*] Starting bots (Delay: {delay_time}s)...")
+        asyncio.create_task(manager.start_all(delay=delay_time))
+
+    # Start control loop (chung cho cả 2 mode)
     try:
         await manager.control_loop()
     except KeyboardInterrupt:
