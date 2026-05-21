@@ -187,8 +187,13 @@ def main() -> None:
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--ignore-certificate-errors")
 
-        driver = uc.Chrome(options=options)
+        driver = uc.Chrome(
+            options=options,
+            version_main=148,
+            browser_executable_path="/usr/bin/google-chrome"
+        )
         driver.maximize_window()
+
 
         # Mở trang login Discord
         driver.get("https://discord.com/login")
