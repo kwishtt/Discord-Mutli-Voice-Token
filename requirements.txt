@@ -1,0 +1,4 @@
+discord.py-self
+colorama
+PyNaCl
+audioop-lts; python_version >= "3.13"
