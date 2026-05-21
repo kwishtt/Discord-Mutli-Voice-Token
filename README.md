@@ -1,215 +1,301 @@
-# Multi-Token-Voice-24/24
+# Multi-Token Voice 24/7
 
-<div align="center">
+A Discord multi-account voice launcher for keeping many accounts connected to voice channels from one terminal. It supports Windows, macOS, Linux, and VPS usage.
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)
-![Discord](https://img.shields.io/badge/Discord-Selfbot-5865F2?style=for-the-badge&logo=discord&logoColor=white)
-![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-lightgrey?style=for-the-badge&logo=linux&logoColor=black)
+> Vietnamese documentation: [docs/README_VN.md](docs/README_VN.md)
+> 24/7 VPS guide: [docs/GUIDE_VN.md](docs/GUIDE_VN.md)
 
-![Project Banner](https://i.ibb.co/0ynRbGsM/Music-Soundcloud-Banner.png)
+## Important Notice
 
-</div>
-A robust, multi-account Discord self-bot management system designed for 24/7 reliability on Linux/VPS environments.
+This project uses Discord user tokens and self-bot behavior. Automating user accounts may violate Discord's Terms of Service and may lead to account restrictions. Use it only if you understand the risk. Keep token files private and never upload them to a public repository.
 
-*(Vui lòng xem tài liệu Tiếng Việt tại [docs/README_VN.md](docs/README_VN.md))*
-## Owner ID (How to set)
+## What This Tool Does
 
-Some sensitive global commands are restricted to a single `OWNER_ID`. Set it before running the bot:
+- Logs in multiple Discord tokens from `tokens.txt`.
+- Joins one or more voice channel IDs.
+- Splits tokens evenly across multiple channels in Normal Mode.
+- Supports Auto-Room mode for lobby based room creation workflows.
+- Provides a terminal menu to toggle mic, camera, deaf, spam reaction, rename, or exit.
+- Reconnects and keeps voice sessions alive as much as possible.
 
-1. Open Discord → `User Settings` → `Advanced` → enable **Developer Mode**.
-2. Right-click your profile (avatar or name in the member list) → **Copy ID**.
-3. Open `self-bot.py` and locate the `OWNER_ID` constant inside the `VoiceClone` class. Replace the placeholder with your numeric ID. Example:
+## Project Files
 
-```py
-# inside self-bot.py
-OWNER_ID: int = 1119601947683590145  # replace this number with your own Discord user ID
+```text
+.
+├── self-bot.py                  # Main bot program
+├── run.bat                      # Windows launcher
+├── run.sh                       # macOS/Linux launcher
+├── requirements.txt             # Python dependencies
+├── tokens.txt                   # Your tokens, one per line
+├── docs/
+│   ├── README_VN.md             # Vietnamese setup guide
+│   └── GUIDE_VN.md              # 24/7 VPS/screen guide
+└── Token Tools/
+    ├── get_token.py             # Browser login and token/user-info helper
+    ├── check_info_token.py      # Validate tokens and export token info
+    └── browser_login.py         # Test login with a token in Chrome
 ```
 
-Save the file and restart the bot.
+## Requirements
 
-## Overview
+- Python 3.8 or newer.
+- Git, if you clone the project from GitHub.
+- Chrome/Chromium only if you use scripts inside `Token Tools/`.
 
-This automated system allows for the scalable deployment and management of multiple Discord user accounts (self-bots) simultaneously. It is engineered with automatic error handling, connection persistence, and resource optimization to ensure uninterrupted voice channel presence.
+Check Python:
 
-## Core Features
+```bash
+python --version
+python3 --version
+```
 
-*   **Multi-Instance Architecture**: Seamlessly handles concurrent logins for multiple tokens.
-*   **Persistent Voice Connection**: Features "stay-alive" logic to automatically rejoin voice channels upon disconnection or socket errors (Code 4006).
-*   **Adaptive Rate-Limiting**:
-    *   **Safe Mode**: Sequential login with delays to minimize detection risk.
-    *   **Turbo Mode**: High-concurrency login for large-scale deployments.
-*   **Centralized Control**: Interactive command-line interface for batch locking mute, deafen, and video states across all instances.
-*   **Resource Efficiency**: Optimized for low-memory environments (VPS).
+On Windows, `python` is usually correct. On macOS/Linux, `python3` is usually correct.
 
-## Windows — Detailed Setup
+## Step 1: Prepare Tokens
 
-If you're running this project on Windows, follow these steps for a reliable environment.
+Create `tokens.txt` in the project root, beside `self-bot.py`.
 
-1. Install Python 3.8+ from https://www.python.org/ and select "Add Python to PATH" during installer.
+```text
+TOKEN_1
+TOKEN_2
+TOKEN_3
+```
 
-2. Open a Command Prompt or PowerShell in the project directory (run as Administrator if you need system-wide installs).
+Rules:
 
-3. Create and activate a virtual environment:
+- Put one token per line.
+- Do not add quotes.
+- Do not share this file.
+- Do not commit this file.
+
+## Step 2: Set OWNER_ID
+
+Some sensitive commands are restricted to one Discord user ID.
+
+1. Open Discord.
+2. Go to `User Settings` -> `Advanced`.
+3. Enable `Developer Mode`.
+4. Right-click your Discord profile and choose `Copy ID`.
+5. Open `self-bot.py`.
+6. Find this line inside `VoiceClone`:
+
+```py
+OWNER_ID: int = 1119601947683590145
+```
+
+Replace the number with your own Discord user ID, save the file, then restart the bot.
+
+## Quick Start
+
+### Windows
+
+Double-click `run.bat`, or run:
+
+```cmd
+run.bat
+```
+
+The launcher creates `venv`, installs dependencies, and starts `self-bot.py`.
+
+### macOS / Linux
+
+Run:
+
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+The launcher creates `venv`, installs dependencies, and starts `self-bot.py`.
+
+## Manual Setup
+
+Use this if the launcher fails or if you prefer running commands yourself.
+
+### Windows CMD
+
+```cmd
+python -m venv venv
+venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python self-bot.py
+```
+
+### Windows PowerShell
 
 ```powershell
 python -m venv venv
-venv\Scripts\activate
-```
-
-4. Upgrade pip and install dependencies:
-
-```powershell
+.\venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
+python self-bot.py
 ```
 
-5. (Optional) If you plan to use `Token Check/browser_login.py` you need Chrome and a matching `chromedriver`:
-
-- Download Chrome/Chromium from Google or Microsoft.
-- Download the `chromedriver` version matching your Chrome version and either place it in a folder on your `PATH` or copy the `chromedriver.exe` into the project root.
-
-6. Run the bot (or use `run.bat`):
+If PowerShell blocks activation, run:
 
 ```powershell
-python self-bot.py
-# or
-.\\run.bat
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
-7. Run at startup (optional): use Windows Task Scheduler to create a task that runs on logon and executes `python <full_path>\self-bot.py` with the working directory set to the project folder.
+Then open PowerShell again and retry the activation command.
 
-Notes:
-- If you need to run multiple instances or services, consider using `nssm` (Non-Sucking Service Manager) to register the script as a Windows service.
-- Always keep `tokens.txt` local and never commit it to source control.
+### macOS
 
-## Getting Started
-
-### Prerequisites
-
-*   **OS**: Linux (Ubuntu/Debian recommended) or macOS.
-*   **Python**: Version 3.8 or higher.
-
-### Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/kwishtt/Discord-Mutli-Voice-Token.git
-    cd Discord-Mutli-Voice-Token
-    ```
-
-2.  **Configure Tokens:**
-    Create a file named `tokens.txt` in the root directory and add your discord tokens, one per line.
-    ```text
-    OTk5...
-    MTAw...
-    ```
-
-3.  **Setup & Run:**
-
-    *   **Linux / macOS:**
-        ```bash
-        chmod +x run.sh
-        ./run.sh
-        ```
-    
-    *   **Windows:**
-        Double-click `run.bat` or run in CMD:
-        ```cmd
-        run.bat
-        ```
-
-### Manual Installation (If scripts fail)
-
-If you prefer to set up the environment manually or encounter issues with the automatic scripts:
-
-**Linux / macOS:**
 ```bash
-# 1. Create Virtual Environment
 python3 -m venv venv
-
-# 2. Activate Venv
 source venv/bin/activate
-
-# 3. Install Dependencies
+python3 -m pip install --upgrade pip
 pip install -r requirements.txt
-
-# 4. Run the Bot
 python3 self-bot.py
 ```
 
-**Windows:**
-```cmd
-:: 1. Create Virtual Environment
-python -m venv venv
+If `python3 -m venv` fails, install Python from https://www.python.org/ or Homebrew.
 
-:: 2. Activate Venv
-venv\Scripts\activate
+### Linux / VPS
 
-:: 3. Install Dependencies
+Debian/Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip
+python3 -m venv venv
+source venv/bin/activate
+python3 -m pip install --upgrade pip
 pip install -r requirements.txt
-
-:: 4. Run the Bot
-python self-bot.py
+python3 self-bot.py
 ```
 
-## Usage
+Fedora/CentOS/RHEL:
 
-Upon launching `self-bot.py`, follow the interactive prompts:
+```bash
+sudo dnf install -y python3 python3-pip python3-devel
+python3 -m venv venv
+source venv/bin/activate
+python3 -m pip install --upgrade pip
+pip install -r requirements.txt
+python3 self-bot.py
+```
 
-1.  **Channel Input**: Enter the numeric ID(s) of the target voice channel(s).
-2.  **Mode Selection**: Choose `1` for Safe Mode (recommended) or `2` for Turbo Mode.
-3.  **Runtime Control**: Use the displayed dashboard to toggle states:
-    *   `[1]` Toggle Mute
-    *   `[2]` Toggle Deafen
-    *   `[3]` Toggle Camera
+## How To Run
 
-## Disclaimer
+After the program starts:
 
-This software is designed for educational and management purposes. Using self-bots (automating user accounts) may violate Discord's Terms of Service. The developers are not responsible for any account suspensions or bans resulting from the use of this tool. Use at your own risk.
+1. Choose mode:
+   - `1` Normal Mode: enter voice channel IDs manually.
+   - `2` Auto-Room: send leader tokens into a lobby, then distribute remaining tokens after rooms are created.
+2. Choose login speed:
+   - `N` or Enter: Safe Mode, 8 second delay.
+   - `y`: Turbo Mode, 3 second delay.
+3. Enter channel IDs:
+   - One channel: `123456789012345678`
+   - Multiple channels: `123456789012345678 987654321098765432`
+4. Use the control menu:
+   - `1` Toggle mic for all accounts.
+   - `2` Toggle camera for all accounts.
+   - `3` Toggle deaf for all accounts.
+   - `4` Spam reaction on a message.
+   - `5` Rename all accounts in the server.
+   - `6` Exit.
 
-## Token Check utilities
+## Running 24/7 On VPS
 
-Two helper scripts live in the `Token Check/` folder to help validate and prepare token lists safely:
+For a VPS, use `screen` so the bot keeps running after you disconnect SSH:
 
-- `Token Check/browser_login.py`
-    - Purpose: Use a Chrome webdriver to inject a token into a browser session and attempt a login. Helpful to quickly verify a token in a browser environment.
-    - Usage (interactive):
-        ```bash
-        python "Token Check/browser_login.py"
-        # or pass token directly
-        python "Token Check/browser_login.py" "YOUR_TOKEN_HERE"
-        ```
-    - Requirements: `selenium`, a compatible `chromedriver`, and Chrome/Chromium installed.
-    - Notes: This script opens a real browser window (headless mode is commented out by default). Close the browser when finished.
-    
-- `Token Check/cleaner.py`
-    - Purpose: Read `tokens.txt`, deduplicate entries, check token validity using the Discord API, and overwrite `tokens.txt` with only valid tokens. Generates `dead_tokens.txt`, `tokens.bak` (backup), and `token_details.csv` (info about valid tokens).
-    - Usage:
-        ```bash
-        pip install -r requirements.txt  # ensure aiohttp and dependencies are installed
-        python "Token Check/cleaner.py"
-        ```
-    - Output files created/updated:
-        - `tokens.txt` (overwritten with valid tokens)
-        - `dead_tokens.txt` (invalid/dead tokens)
-        - `tokens.bak` (original backup)
-        - `token_details.csv` (username/email/verified information for valid tokens)
+```bash
+screen -S discord_voice
+source venv/bin/activate
+python3 self-bot.py
+```
 
-Security reminder: Never commit `tokens.txt`, `dead_tokens.txt`, or other token-containing files to a public repository. The repo's `.gitignore` now includes `*.txt` to help prevent accidental commits, but double-check before pushing.
+Detach without stopping:
 
-### New: `Token Check/add_token.py`
+```text
+Ctrl + A, then D
+```
 
- - Purpose: Interactive helper to paste a token, validate it against the Discord API, and append it to `tokens.txt` (appends to the end — does not overwrite).
- - Usage:
-     ```bash
-     pip install -r requirements.txt  # ensure aiohttp and colorama are installed
-     python "Token Check/add_token.py"
-     ```
- - Behavior: The script validates the token; if valid it is appended to `tokens.txt` unless already present. If invalid, the script asks whether to append anyway.
+Return later:
 
-## Support Me 
+```bash
+screen -r discord_voice
+```
 
-*   **⭐ Star Project**: Star this project on GitHub to show your support!
-*   **Discord**: Join the support server [discord.gg/mgl](https://discord.gg/mgl)
----
-*Developed by kwishtt*
+Full Vietnamese VPS guide: [docs/GUIDE_VN.md](docs/GUIDE_VN.md)
+
+## Token Tools
+
+Install dependencies first:
+
+```bash
+pip install -r requirements.txt
+```
+
+Validate tokens and write token details:
+
+```bash
+python "Token Tools/check_info_token.py"
+```
+
+Open Chrome and test login with a token:
+
+```bash
+python "Token Tools/browser_login.py"
+python "Token Tools/browser_login.py" "YOUR_TOKEN_HERE"
+```
+
+Open Chrome, log in manually, and save token/user info:
+
+```bash
+python "Token Tools/get_token.py"
+```
+
+Notes:
+
+- `get_token.py` is currently configured for Linux Chrome at `/usr/bin/google-chrome`.
+- Browser tools require Chrome/Chromium and compatible driver support.
+- Generated files such as `tokens.txt`, `dead_tokens.txt`, `token_details.csv`, `evs.txt`, and `user_info.txt` may contain sensitive data.
+
+## Common Problems
+
+### `File tokens.txt not found`
+
+Create `tokens.txt` in the same folder as `self-bot.py`.
+
+### `No tokens found`
+
+Make sure `tokens.txt` has at least one non-empty line.
+
+### `python` is not recognized on Windows
+
+Reinstall Python and enable `Add Python to PATH`, then reopen CMD/PowerShell.
+
+### `python3 -m venv` fails on Ubuntu/Debian
+
+Install venv support:
+
+```bash
+sudo apt install -y python3-venv python3-pip
+```
+
+### PowerShell cannot activate venv
+
+Run:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+### Chrome driver error in Token Tools
+
+Install Chrome/Chromium and make sure Selenium can start Chrome. On Debian/Ubuntu:
+
+```bash
+sudo apt install -y chromium chromium-driver
+```
+
+## Support
+
+- Star the project on GitHub if it helps you.
+- Discord support server: https://discord.gg/mgl
+
+Developed by `kwishtt`.
